@@ -1,0 +1,35 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    // 자바스크립트 버전, 7은 ECMA2016
+    "ecmaVersion": 7,
+    // 모듈 export를 위해 import, export를 사용 가능여부를 설정, script는 사용불가
+    "sourceType": "script",
+    // jsx 허용을 설정, back-end 설정이기 때문에 사용 안함
+    "ecmaFeatures": {
+      "jsx": false
+    }
+  },
+  "env": {
+    // 브라우저의 document와 같은 객체 사용 여부
+    "browser": false,
+    // node.js에서 console과 같은 전역변수 사용 여부
+    "node": true
+  },
+  // ESLint가 무시할 디렉토리, 파일을 설정
+  "ignorePatterns": [
+    "node_modules/"
+  ],
+  
+  // ESLint 룰을 설정
+  "rules": {
+    // prettier에 맞게 룰을 설정
+    "prettier/prettier": "error"
+    // "quotes": ["error", "single", { "avoidEscape": true }],
+    // "indent": ["error", 2]
+  }
+}
