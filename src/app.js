@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const { swaggerUi, specs } = require('./config/swagger');
 
 var app = express();
 
@@ -21,7 +22,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 app.use('/', indexRouter); // 경로 /로 시작하면 indexRouter라는 미들웨어 적용
-app.use('/users', usersRouter); //users로 시작하는 path들에게 userRouter 미들웨어 적용
+app.use('/api/members', usersRouter); //users로 시작하는 path들에게 userRouter 미들웨어 적용
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs)); //swagger API 페이지
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
