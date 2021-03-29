@@ -1,9 +1,15 @@
 const admin = require('firebase-admin');
+const jwt = require('jsonwebtoken');
 var db = require('../config/db');
 var express = require('express');
 var router = express.Router();
 
-var serviceAccount = require('../config/serviceAccountKey.json');
+var authController = require('../controller/AuthController');
+
+//POST checkGoogleToken
+router.post('/', authController.verifyGoogleToken);
+
+/* var serviceAccount = require('../../config/serviceAccountKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -12,6 +18,7 @@ admin.initializeApp({
 // idToken comes from the client app
 router.post('/', function (req, res) {
   const idToken = req.headers.authorization.split('Bearer ')[1];
+  const secret = req.app.get('jwt-secret');
   admin
     .auth()
     .verifyIdToken(idToken)
@@ -64,6 +71,6 @@ router.post('/', function (req, res) {
       console.error('Error while verifying Firebase ID token:', error);
       res.json({ code: 403, error: 'Unauthorized' });
     });
-});
+}); */
 
 module.exports = router;
