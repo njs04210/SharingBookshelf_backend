@@ -20,8 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var oauthRouter = require('./routes/oauth');
 
 app.use('/', indexRouter); // 경로 /로 시작하면 indexRouter라는 미들웨어 적용
+app.use('/api/oauth', oauthRouter); //google token verify
 app.use('/api/members', usersRouter); //users로 시작하는 path들에게 userRouter 미들웨어 적용
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs)); //swagger API 페이지
 
