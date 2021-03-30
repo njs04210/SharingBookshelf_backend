@@ -13,13 +13,13 @@ module.exports = router;
  * @swagger
  *   components:
  *     schemas:
- *      Members:
+ *      User:
  *        type: object
  *        properties:
  *          code:
  *            type: integer
  *            description: 응답코드
- *          msg:
+ *          message:
  *            type: string
  *            description: 응답메시지
  */
@@ -27,56 +27,52 @@ module.exports = router;
 /**
  * @swagger
  * tags:
- *   name: Members
- *   description: API to manage Members
+ *   name: User
+ *   description: API to manage Users
  */
 
 /**
  * @swagger
- * /api/members:
- *   get:
- *     tags: [Members]
- *     summary: 유저 정보 가져오기
+ * /api/user:
+ *   post:
+ *     tags: [User]
+ *     summary: 로그인
+ *     parameters:
+ *     - name: googleToken
+ *       in : header
+ *       description: an authorization header
+ *       required: true
+ *       type: string
  *     responses:
  *       "200":
- *         description: 유저 정보 성공적으로 가져옴
+ *         description: JWT 정상 발급
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 name:
+ *                 code:
+ *                   type: integer
+ *                   description: 응답코드
+ *                 message:
  *                   type: string
- *                   description: 유저 이름
- *   post:
- *     tags: [Members]
- *     summary: 로그인 또는 회원가입
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 description: 구글 이메일
- *               name:
- *                 type: string
- *                 description: 이름
- *               password:
- *                 type: string
- *                 description: 파이어베이스 구글 uid
- *     responses:
- *       "200":
- *         description: 기존회원 로그인 성공
+ *                   description: 응답메시지
+ *                 flag:
+ *                   type: integer
+ *                   description: 0 = 신규회원, 1 = 기존회원
+ *                 token:
+ *                   type: string
+ *                   description: 발급된 JWT
+ *       "500":
+ *         description: 서버 에러 - JWT 발급에러
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Members'
- *       "201":
- *         description: 신규회원 가입 성공
+ *               $ref: '#/components/schemas/User'
+ *       "403":
+ *         description: Error Verifying Firebase user
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Members'
+ *               $ref: '#/components/schemas/User'
  */
