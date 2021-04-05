@@ -4,6 +4,7 @@
     "plugin:prettier/recommended"
   ],
   "plugins": ["prettier"],
+  "parser": "babel-eslint",
   "parserOptions": {
     // 자바스크립트 버전, 7은 ECMA2016
     "ecmaVersion": 7,

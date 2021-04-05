@@ -1,8 +1,12 @@
-var db = require('../config/db');
-var Promise = require('es6-promise').Promise;
+const db = require('../config/db');
+const Promise = require('es6-promise').Promise;
 
 module.exports = {
-  checkUserExist: function (email, password, name, photoURL) {
+  checkUserExist: function (UserRecord) {
+    var email = UserRecord.email;
+    var name = UserRecord.displayName;
+    var password = UserRecord.uid;
+    var photoURL = UserRecord.photoURL;
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT * FROM member WHERE email = ?`,
@@ -16,12 +20,12 @@ module.exports = {
               [email, name, password, photoURL],
               function (err) {
                 if (err) reject(err);
-                resolve({ created: new Date(), flag: 0 });
+                resolve({ flag: 0 });
               }
             );
           } else {
             //member 테이블에 이미 존재하는 회원일때. != undefined
-            resolve({ created: new Date(), flag: 1 });
+            resolve({ flag: 1 });
           }
         }
       );
