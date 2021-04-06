@@ -35,6 +35,10 @@ module.exports = {
               });
             });
           });
+      })
+      .catch((error) => {
+        console.error('Error while verifying Firebase ID token:', error);
+        res.status(statusCode.FORBIDDEN).json({ msg: 'Unauthorized' });
       });
   },
 };

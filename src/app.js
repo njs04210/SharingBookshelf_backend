@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // 정적파일 경로
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static('public'));
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
