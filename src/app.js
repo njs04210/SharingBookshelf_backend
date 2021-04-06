@@ -1,12 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-// Swagger사용
-const { swaggerUi, specs } = require('./config/swagger');
-
-// express configuration
-var app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const { swaggerUi, specs } = require('./config/swagger'); // Swagger사용
+const app = express(); // express configuration
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,8 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.static('public'));
 
-var indexRouter = require('./routes/index');
-var userRouter = require('./routes/user');
+const indexRouter = require('./routes/index');
+const userRouter = require('./routes/user');
 
 app.use('/', indexRouter); // 경로 /로 시작하면 indexRouter라는 미들웨어 적용
 app.use('/api/user', userRouter);
