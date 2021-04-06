@@ -20,12 +20,19 @@ module.exports = {
               [email, name, password, photoURL],
               function (err) {
                 if (err) reject(err);
-                resolve({ flag: 0 });
+                db.query(
+                  `SELECT mem_id FROM member WHERE email = ?`,
+                  [email],
+                  function (err, result) {
+                    if (err) reject(err);
+                    resolve({ flag: 0, mem_id: result[0].mem_id });
+                  }
+                );
               }
             );
           } else {
             //member 테이블에 이미 존재하는 회원일때. != undefined
-            resolve({ flag: 1 });
+            resolve({ flag: 1, mem_id: results[0].mem_id });
           }
         }
       );

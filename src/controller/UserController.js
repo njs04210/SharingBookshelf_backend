@@ -22,12 +22,14 @@ module.exports = {
           .then((UserRecord) => {
             //DB에서 회원정보 확인하기
             userModel.checkUserExist(UserRecord).then((results) => {
-              const flag = results.flag;
+              var flag = results.flag;
+              var mem_id = results.mem_id;
               jwt.sign(UserRecord).then((jwtToken) => {
                 const accessToken = jwtToken.accessToken;
                 return res.status(statusCode.OK).json({
                   flag,
-                  message: '정상 토큰발급',
+                  mem_id,
+                  msg: '정상 회원',
                   accessToken,
                 });
               });
