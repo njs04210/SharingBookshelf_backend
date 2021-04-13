@@ -21,10 +21,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.static('public'));
 
 const indexRouter = require('./routes/index');
-const userRouter = require('./routes/user');
+const userRouter = require('./routes/users');
 
 app.use('/', indexRouter); // 경로 /로 시작하면 indexRouter라는 미들웨어 적용
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs)); //swagger API 페이지
 
 // catch 404 and forward to error handler

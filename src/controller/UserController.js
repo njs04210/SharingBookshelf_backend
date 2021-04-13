@@ -10,10 +10,10 @@ admin.initializeApp({
 
 exports.login = function (req, res) {
   /* Verify Google Token */
-  const idToken = req.headers.authorization.split('Bearer ')[1];
+  const GoogleToken = req.headers.authorization.split('Bearer ')[1];
   admin
     .auth()
-    .verifyIdToken(idToken)
+    .verifyIdToken(GoogleToken)
     .then((decodedIdToken) => {
       admin
         .auth()
@@ -21,15 +21,17 @@ exports.login = function (req, res) {
         .then((UserRecord) => {
           //DB에서 회원정보 확인하기
           userModel.checkUserExist(UserRecord).then((results) => {
-            var flag = results.flag;
-            var mem_id = results.mem_id;
+            const flag = results.flag;
+            //jwt 발급
             jwt.sign(UserRecord).then((jwtToken) => {
               const accessToken = jwtToken.accessToken;
-              return res.status(statusCode.OK).json({
-                flag,
-                mem_id,
-                msg: '정상 회원',
-                accessToken,
+              const email = UserRecord.email;
+              userModel.setAccessToken(email, accessToken).then(() => {
+                return res.status(statusCode.OK).json({
+                  flag,
+                  msg: '정상 회원 등록',
+                  accessToken,
+                });
               });
             });
           });
@@ -38,5 +40,16 @@ exports.login = function (req, res) {
     .catch((error) => {
       console.error('Error while verifying Firebase ID token:', error);
       res.status(statusCode.FORBIDDEN).json({ msg: 'Unauthorized' });
+    });
+};
+
+exports.setInfo = async (req, res) => {
+  await userModel
+    .settings(req)
+    .then(() => {
+      res.status(statusCode.OK).json({ msg: '신규회원 정보등록 성공' });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
