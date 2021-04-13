@@ -5,7 +5,7 @@ const TOKEN_INVALID = -2;
 
 const authUtil = {
   checkToken: async (req, res, next) => {
-    var token = req.headers.token;
+    var token = req.headers.authorization.split('Bearer ')[1];
     // 토큰 없음
     if (!token)
       return res
@@ -23,11 +23,7 @@ const authUtil = {
       return res
         .status(CODE.UNAUTHORIZED)
         .json({ message: '토큰의 유효하지 않습니다.' });
-    if (user.idx === undefined)
-      return res
-        .status(CODE.UNAUTHORIZED)
-        .json({ message: '토큰이 존재하지 않습니다.' });
-    req.idx = user.idx;
+    req.email = user.email;
     next();
   },
 };
