@@ -22,6 +22,7 @@ exports.login = function (req, res) {
           //DB에서 회원정보 확인하기
           userModel.checkUserExist(UserRecord).then((results) => {
             const flag = results.flag;
+            const memId = results.memId;
             //jwt 발급
             jwt.sign(UserRecord).then((jwtToken) => {
               const accessToken = jwtToken.accessToken;
@@ -31,6 +32,7 @@ exports.login = function (req, res) {
                   flag,
                   msg: '정상 회원 등록',
                   accessToken,
+                  memId,
                 });
               });
             });
@@ -52,4 +54,20 @@ exports.setInfo = async (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+};
+
+exports.getInfo = async (req, res) => {
+  const memId = req.params.memId;
+  const memInfo = await userModel.find(memId);
+  if (memInfo == undefined) res.status(statusCode.NOT_FOUND).json({ flag: 0 });
+  else {
+    res.json({
+      flag: 1,
+      profileImg: memInfo.photoURL,
+      nickname: memInfo.nickname,
+      area: memInfo.area,
+      email: memInfo.email,
+      name: memInfo.name,
+    });
+  }
 };
