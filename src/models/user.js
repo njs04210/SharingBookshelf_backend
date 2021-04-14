@@ -4,7 +4,7 @@ const Promise = require('es6-promise').Promise;
 exports.checkUserExist = function (UserRecord) {
   const email = UserRecord.email;
   const name = UserRecord.displayName;
-  const photoURL = UserRecord.photoURL;
+  //const photoURL = UserRecord.photoURL;
   return new Promise((resolve, reject) => {
     db.query(
       `SELECT * FROM member WHERE email = ?`,
@@ -14,8 +14,8 @@ exports.checkUserExist = function (UserRecord) {
         if (results[0] == undefined) {
           //member 테이블에 email없는 상태(undefined)면 insert
           db.query(
-            `INSERT INTO member (email, name, photoURL, created) VALUES (?, ? ,?, NOW())`,
-            [email, name, photoURL],
+            `INSERT INTO member (email, name,  created) VALUES (?, ? , NOW())`,
+            [email, name],
             function (err) {
               if (err) reject(err);
               db.query(
@@ -23,14 +23,23 @@ exports.checkUserExist = function (UserRecord) {
                 [email],
                 function (err) {
                   if (err) reject(err);
-                  resolve({ flag: 0 });
+                  db.query(
+                    `SELECT mem_id FROM member WHERE email =?`,
+                    [email],
+                    function (err, res) {
+                      if (err) reject(err);
+                      const memId = res[0].mem_id;
+                      resolve({ flag: 0, memId });
+                    }
+                  );
                 }
               );
             }
           );
         } else {
           //member 테이블에 이미 존재하는 회원일때. != undefined
-          resolve({ flag: 1 });
+          const memId = results[0].mem_id;
+          resolve({ flag: 1, memId });
         }
       }
     );
@@ -87,4 +96,17 @@ exports.settings = function (data) {
       if (err) throw err;
       return res;
     }; */
+};
+
+exports.find = function (memId) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * from member WHERE mem_id=?`,
+      [memId],
+      function (err, res) {
+        if (err) reject(err);
+        else resolve(res[0]);
+      }
+    );
+  });
 };
