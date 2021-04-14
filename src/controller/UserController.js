@@ -61,7 +61,7 @@ exports.getInfo = async (req, res) => {
   const memInfo = await userModel.find(memId);
   if (memInfo == undefined) res.status(statusCode.NOT_FOUND).json({ flag: 0 });
   else {
-    res.json({
+    res.status(statusCode.OK).json({
       flag: 1,
       profileImg: memInfo.photoURL,
       nickname: memInfo.nickname,
