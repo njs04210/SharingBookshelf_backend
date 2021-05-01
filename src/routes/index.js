@@ -13,6 +13,10 @@ module.exports = router;
  * tags:
  *   name: Users
  *   description: API to manage Users
+ * @swagger
+ * tags:
+ *   name: Bookshelf
+ *   description: API to manager Bookshelf
  */
 
 /**
@@ -147,4 +151,48 @@ module.exports = router;
  *                 name:
  *                   type: string
  *                   descripton: 이름
+ */
+
+/**
+ * @swagger
+ * /api/bookshelvs:
+ *   post:
+ *     tags: [Bookshelf]
+ *     summary: 책장 등록
+ *     parameters:
+ *     - name: accessToken(JWT)
+ *       in : header
+ *       description: 어플 자체적으로 발급한 accessToken
+ *       required: true
+ *       type: string
+ *     responses:
+ *       "200":
+ *         description: JWT 정상 발급
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 flag:
+ *                   type: integer
+ *                   description: 0 = 신규회원, 1 = 기존회원
+ *                 msg:
+ *                   type: string
+ *                   description: 응답메시지
+ *                 accessToken:
+ *                   type: integer
+ *                   description: 발급된 JWT
+ *                 memId:
+ *                   type: string
+ *                   description: 회원고유id
+ *       "403":
+ *         description: Error Verifying Firebase user(Unauthorized)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   description: 응답메시지
  */
