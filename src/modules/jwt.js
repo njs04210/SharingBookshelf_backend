@@ -10,6 +10,7 @@ module.exports = {
     const payload = {
       name: user.displayName,
       email: user.email,
+      memId: user.memId,
     };
     const result = {
       //sign메소드를 통해 access token 발급!

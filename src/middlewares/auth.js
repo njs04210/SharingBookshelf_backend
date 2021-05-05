@@ -24,6 +24,7 @@ const authUtil = {
         .status(CODE.UNAUTHORIZED)
         .json({ message: '토큰의 유효하지 않습니다.' });
     req.email = user.email;
+    req.memId = user.memId;
     next();
   },
 };

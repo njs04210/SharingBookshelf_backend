@@ -21,8 +21,10 @@ exports.login = function (req, res) {
         .then((UserRecord) => {
           //DB에서 회원정보 확인하기
           userModel.checkUserExist(UserRecord).then((results) => {
+            console.log(UserRecord);
             const flag = results.flag;
             const memId = results.memId;
+            UserRecord.memId = memId;
             //jwt 발급
             jwt.sign(UserRecord).then((jwtToken) => {
               const accessToken = jwtToken.accessToken;
