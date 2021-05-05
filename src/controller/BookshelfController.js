@@ -13,6 +13,8 @@ exports.getShelf = async (req, res) => {
       res
         .status(statusCode.OK)
         .json({ code: 1, msg: '책장에 책이 존재하지 않음' });
+    } else {
+      res.status(statusCode.OK).json({ code: 1, msg: '책장에 책이 존재함' });
     }
   }
 };

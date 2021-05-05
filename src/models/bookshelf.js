@@ -21,11 +21,17 @@ exports.getBooks = function (bookshelf_id) {
       [bookshelf_id],
       function (err, res) {
         if (err) reject(err);
-        else if (res == undefined) {
+        else if (res[0] == undefined) {
           //책장에 책이 없는 경우
           resolve(res);
         } else {
-          const book_id = res.book_id;
+          var booklist = new Array();
+          const books_id = JSON.parse(JSON.stringify(res));
+          books_id.forEach(function (element) {
+            booklist.push(element['book_id']);
+          });
+          const book_id = res[0].book_id;
+          console.log(book_id);
           db.query(
             `SELECT thumbnail from Book WHERE book_id=?`,
             [book_id],
