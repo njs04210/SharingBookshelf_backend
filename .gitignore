@@ -115,8 +115,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# for security
-src/config/serviceAccountKey.json
-src/config/db.js
-src/config/secretKey.js
 
