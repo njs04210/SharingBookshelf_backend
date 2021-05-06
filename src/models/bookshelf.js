@@ -49,7 +49,7 @@ exports.getBooks = function (bookshelf_id) {
 exports.create = function (memId) {
   return new Promise((resolve, reject) => {
     db.query(
-      `INSERT INTO BookShelf (mem_id) VALUES (?)`,
+      `INSERT INTO Bookshelf (mem_id) VALUES (?)`,
       [memId],
       function (err, res) {
         if (err) reject(err);
@@ -117,12 +117,12 @@ exports.addBook = function (memId, book) {
                 } else {
                   const book_id = res[0].book_id;
                   db.query(
-                    `SELECT book_id FROM Bookshelf_item WHERE bookshelf_id = ?`,
-                    [bookshelf_id],
+                    `SELECT * FROM Bookshelf_item WHERE bookshelf_id = ? AND book_id = ?`,
+                    [bookshelf_id, book_id],
                     function (err, res) {
                       if (err) reject(err);
                       else {
-                        if (res[0].book_id == undefined) {
+                        if (res[0] == undefined) {
                           db.query(
                             `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
                             [bookshelf_id, book_id],

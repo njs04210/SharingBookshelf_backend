@@ -14,12 +14,12 @@ exports.checkUserExist = function (UserRecord) {
         if (results[0] == undefined) {
           //member 테이블에 email없는 상태(undefined)면 insert
           db.query(
-            `INSERT INTO Member (email, name,  created) VALUES (?, ? , NOW())`,
+            `INSERT INTO Member (email, name, created) VALUES (?, ? , NOW())`,
             [email, name],
             function (err) {
               if (err) reject(err);
               db.query(
-                `INSERT INTO Kids(mem_id) SELECT mem_id FROM Member WHERE email = ?`,
+                `INSERT INTO Kids (mem_id) SELECT mem_id FROM Member WHERE email = ?`,
                 [email],
                 function (err) {
                   if (err) reject(err);
