@@ -11,7 +11,7 @@ const db = mysql.createConnection({
 /* const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'Pearlkim05!',
+  password: '',
   database: 'iBookShare',
   dateStrings: 'date',
 }); */
