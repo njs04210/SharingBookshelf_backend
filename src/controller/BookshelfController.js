@@ -12,9 +12,12 @@ exports.getShelf = async (req, res) => {
     if (booksInShelf == undefined) {
       res
         .status(statusCode.OK)
-        .json({ code: 1, msg: '책장에 책이 존재하지 않음' });
+        .json({ code: 1, msg: '책장에 책이 존재하지 않음', hasBooks: null });
     } else {
-      res.status(statusCode.OK).json({ code: 1, msg: '책장에 책이 존재함' });
+      console.log(booksInShelf);
+      res
+        .status(statusCode.OK)
+        .json({ code: 1, msg: '책장에 책이 존재함', hasBooks: booksInShelf });
     }
   }
 };
