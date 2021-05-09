@@ -30,16 +30,27 @@ exports.getBooks = function (bookshelf_id) {
           books_id.forEach(function (element) {
             booklist.push(element['book_id']);
           });
-          const book_id = res[0].book_id;
-          console.log(book_id);
-          db.query(
-            `SELECT thumbnail from Book WHERE book_id=?`,
-            [book_id],
-            function (err, res) {
-              if (err) reject(err);
-              else resolve(res[0]);
-            }
-          );
+
+          var JsonArray = new Array();
+          for (let i = 0; i < booklist.length; i++) {
+            var book_id = booklist[i];
+            db.query(
+              `SELECT * FROM Book WHERE book_id = ?`,
+              [book_id],
+              function (err, res) {
+                if (err) reject(err);
+                else {
+                  var book_info = JSON.stringify(res[0]);
+                  JsonArray.push(JSON.parse(book_info));
+                  // console.log(book_info);
+                  //console.log(i + ' => ' + JsonArray);
+                  if (i == booklist.length - 1) {
+                    resolve(JsonArray);
+                  }
+                }
+              }
+            );
+          }
         }
       }
     );
