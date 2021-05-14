@@ -114,9 +114,18 @@ exports.addBook = function (memId, book) {
                               db.query(
                                 `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
                                 [bookshelf_id, book_id],
-                                function (err, res) {
+                                function (err) {
                                   if (err) reject(err);
-                                  else resolve(res);
+                                  else {
+                                    db.query(
+                                      `INSERT INTO Memo (mem_id, ISBN) VALUES (?,?)`,
+                                      [memId, ISBN],
+                                      function (err, res) {
+                                        if (err) reject(err);
+                                        else resolve(res);
+                                      }
+                                    );
+                                  }
                                 }
                               );
                             }
@@ -137,9 +146,18 @@ exports.addBook = function (memId, book) {
                           db.query(
                             `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
                             [bookshelf_id, book_id],
-                            function (err, res) {
+                            function (err) {
                               if (err) reject(err);
-                              else resolve(res);
+                              else {
+                                db.query(
+                                  `INSERT INTO Memo (mem_id, ISBN) VALUES (?,?)`,
+                                  [memId, ISBN],
+                                  function (err, res) {
+                                    if (err) reject(err);
+                                    else resolve(res);
+                                  }
+                                );
+                              }
                             }
                           );
                         } else {

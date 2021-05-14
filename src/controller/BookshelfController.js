@@ -14,7 +14,6 @@ exports.getShelf = async (req, res) => {
         .status(statusCode.OK)
         .json({ code: 1, msg: '책장에 책이 존재하지 않음', hasBooks: null });
     } else {
-      console.log(booksInShelf);
       res
         .status(statusCode.OK)
         .json({ code: 1, msg: '책장에 책이 존재함', hasBooks: booksInShelf });
