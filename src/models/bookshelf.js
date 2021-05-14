@@ -42,8 +42,6 @@ exports.getBooks = function (bookshelf_id) {
                 else {
                   var book_info = JSON.stringify(res[0]);
                   JsonArray.push(JSON.parse(book_info));
-                  // console.log(book_info);
-                  //console.log(i + ' => ' + JsonArray);
                   if (i == booklist.length - 1) {
                     resolve(JsonArray);
                   }

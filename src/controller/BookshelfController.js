@@ -32,12 +32,6 @@ exports.createShelf = async (req, res) => {
 exports.addBook = async (req, res) => {
   const memId = req.params.memId;
   const book = JSON.parse(JSON.stringify(req.body));
-  /* console.log(book);
-  if (book.ISBN.indexOf(' ')) {
-    console.log(book.ISBN.split(' ')[1]);
-  }
-  console.log(book); */
-  //const ISBN = book.ISBN.split(' ')[1];
   const addBookStatus = await bookshelfModel.addBook(memId, book);
   if (addBookStatus) {
     if (addBookStatus == 53) {
