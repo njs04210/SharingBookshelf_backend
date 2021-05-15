@@ -42,8 +42,6 @@ exports.getBooks = function (bookshelf_id) {
                 else {
                   var book_info = JSON.stringify(res[0]);
                   JsonArray.push(JSON.parse(book_info));
-                  // console.log(book_info);
-                  //console.log(i + ' => ' + JsonArray);
                   if (i == booklist.length - 1) {
                     resolve(JsonArray);
                   }
@@ -114,9 +112,18 @@ exports.addBook = function (memId, book) {
                               db.query(
                                 `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
                                 [bookshelf_id, book_id],
-                                function (err, res) {
+                                function (err) {
                                   if (err) reject(err);
-                                  else resolve(res);
+                                  else {
+                                    db.query(
+                                      `INSERT INTO Memo (mem_id, book_id) VALUES (?,?)`,
+                                      [memId, book_id],
+                                      function (err, res) {
+                                        if (err) reject(err);
+                                        else resolve(res);
+                                      }
+                                    );
+                                  }
                                 }
                               );
                             }
@@ -137,9 +144,18 @@ exports.addBook = function (memId, book) {
                           db.query(
                             `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
                             [bookshelf_id, book_id],
-                            function (err, res) {
+                            function (err) {
                               if (err) reject(err);
-                              else resolve(res);
+                              else {
+                                db.query(
+                                  `INSERT INTO Memo (mem_id, book_id) VALUES (?,?)`,
+                                  [memId, book_id],
+                                  function (err, res) {
+                                    if (err) reject(err);
+                                    else resolve(res);
+                                  }
+                                );
+                              }
                             }
                           );
                         } else {
