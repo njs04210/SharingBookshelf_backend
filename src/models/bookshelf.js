@@ -116,8 +116,8 @@ exports.addBook = function (memId, book) {
                                   if (err) reject(err);
                                   else {
                                     db.query(
-                                      `INSERT INTO Memo (mem_id, ISBN) VALUES (?,?)`,
-                                      [memId, ISBN],
+                                      `INSERT INTO Memo (mem_id, book_id) VALUES (?,?)`,
+                                      [memId, book_id],
                                       function (err, res) {
                                         if (err) reject(err);
                                         else resolve(res);
@@ -148,8 +148,8 @@ exports.addBook = function (memId, book) {
                               if (err) reject(err);
                               else {
                                 db.query(
-                                  `INSERT INTO Memo (mem_id, ISBN) VALUES (?,?)`,
-                                  [memId, ISBN],
+                                  `INSERT INTO Memo (mem_id, book_id) VALUES (?,?)`,
+                                  [memId, book_id],
                                   function (err, res) {
                                     if (err) reject(err);
                                     else resolve(res);

@@ -7,8 +7,9 @@ const authUtil = require('../middlewares/auth').checkToken;
 router.patch('/', authUtil, MemoController.create);
 
 // 메모 불러오기
-router.get('/:isbn', authUtil, MemoController.find);
+router.get('/:bookId', authUtil, MemoController.find);
 
 // 모든 메모 불러오기
+router.get('/', authUtil, MemoController.findAll);
 
 module.exports = router;
