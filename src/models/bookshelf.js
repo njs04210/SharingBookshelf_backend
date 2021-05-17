@@ -110,8 +110,8 @@ exports.addBook = function (memId, book) {
                             else {
                               const book_id = res[0].book_id;
                               db.query(
-                                `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
-                                [bookshelf_id, book_id],
+                                `INSERT INTO Bookshelf_item (bookshelf_id, book_id, category) VALUES (?,?,?)`,
+                                [bookshelf_id, book_id, book.category],
                                 function (err) {
                                   if (err) reject(err);
                                   else {
@@ -142,8 +142,8 @@ exports.addBook = function (memId, book) {
                       else {
                         if (res[0] == undefined) {
                           db.query(
-                            `INSERT INTO Bookshelf_item (bookshelf_id, book_id) VALUES (?,?)`,
-                            [bookshelf_id, book_id],
+                            `INSERT INTO Bookshelf_item (bookshelf_id, book_id, category) VALUES (?,?, ?)`,
+                            [bookshelf_id, book_id, book.category],
                             function (err) {
                               if (err) reject(err);
                               else {
