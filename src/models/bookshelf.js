@@ -14,6 +14,21 @@ exports.find = function (memId) {
   });
 };
 
+exports.findItem = function (bookshelf_id, book_id) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM Bookshelf_item WHERE bookshelf_id = ? AND book_id = ?`,
+      [bookshelf_id, book_id],
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          resolve(res[0]);
+        }
+      }
+    );
+  });
+};
+
 exports.getBooks = function (bookshelf_id, bookreport_id) {
   const sql_all = `SELECT book_id from Bookshelf_item WHERE bookshelf_id = ?`;
   const sql_noReport = `SELECT book_id from Bookshelf_item WHERE bookshelf_id = ? AND bookreport_id IS NULL`;
