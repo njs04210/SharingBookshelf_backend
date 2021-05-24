@@ -1,5 +1,35 @@
 const bookshelfModel = require('../models/bookshelf');
+const userModel = require('../models/user');
 const statusCode = require('../modules/statusCode');
+
+exports.getAllShelf = async (req, res) => {
+  const memId = req.memId;
+  var result = [];
+  const allBookshelf = await bookshelfModel.findAll(memId);
+  for (let i = 0; i < allBookshelf.length; i++) {
+    var onePersonData = {};
+    var memberData = {};
+    const booksInShelf = await bookshelfModel.getBooks(
+      allBookshelf[i].bookshelf_id
+    );
+    if (booksInShelf.length != 0) {
+      const member = await userModel.find(allBookshelf[i].mem_id);
+      var memberJson = JSON.parse(JSON.stringify(member));
+      memberData.mem_id = memberJson.mem_id;
+      memberData.photoURL = memberJson.photoURL;
+      memberData.nickname = memberJson.nickname;
+
+      onePersonData.member = memberData;
+      onePersonData.hasBookList = booksInShelf;
+      result.push(onePersonData);
+    }
+    if (i == allBookshelf.length - 1) {
+      res
+        .status(statusCode.OK)
+        .json({ code: 60, msg: '회원의 모든 책장 가져오기', result: result });
+    }
+  }
+};
 
 exports.getShelf = async (req, res) => {
   const memId = req.params.memId;
