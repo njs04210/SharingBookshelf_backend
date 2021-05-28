@@ -3,21 +3,46 @@ const statusCode = require('../modules/statusCode');
 
 exports.getShelf = async (req, res) => {
   const memId = req.params.memId;
+  var category = req.query.category;
   const bookshelfStatus = await bookshelfModel.find(memId);
-  if (bookshelfStatus == undefined) {
-    res.status(statusCode.OK).json({ code: 0, msg: '책장이 존재하지 않음' });
-  } else {
-    const bookshelf_id = bookshelfStatus.bookshelf_id;
+  var bookshelf_id, booksInShelf;
 
-    const booksInShelf = await bookshelfModel.getBooks(bookshelf_id);
-    if (booksInShelf == undefined) {
-      res
-        .status(statusCode.OK)
-        .json({ code: 1, msg: '책장에 책이 존재하지 않음', hasBooks: null });
+  if (category == undefined) {
+    if (bookshelfStatus == undefined) {
+      res.status(statusCode.OK).json({ code: 0, msg: '책장이 존재하지 않음' });
     } else {
-      res
-        .status(statusCode.OK)
-        .json({ code: 1, msg: '책장에 책이 존재함', hasBooks: booksInShelf });
+      bookshelf_id = bookshelfStatus.bookshelf_id;
+      booksInShelf = await bookshelfModel.getBooks(bookshelf_id);
+      if (booksInShelf[0] == undefined) {
+        res
+          .status(statusCode.OK)
+          .json({ code: 1, msg: '책장에 책이 존재하지 않음', hasBooks: null });
+      } else {
+        res
+          .status(statusCode.OK)
+          .json({ code: 1, msg: '책장에 책이 존재함', hasBooks: booksInShelf });
+      }
+    }
+  } else {
+    category = parseInt(req.query.category);
+
+    if (bookshelfStatus == undefined) {
+      res.status(statusCode.OK).json({ code: 0, msg: '책장이 존재하지 않음' });
+    } else {
+      bookshelf_id = bookshelfStatus.bookshelf_id;
+      booksInShelf = await bookshelfModel.getBooksCategory(
+        bookshelf_id,
+        category
+      );
+      if (booksInShelf[0] == undefined) {
+        res
+          .status(statusCode.OK)
+          .json({ code: 1, msg: '책장에 책이 존재하지 않음', hasBooks: null });
+      } else {
+        res
+          .status(statusCode.OK)
+          .json({ code: 1, msg: '책장에 책이 존재함', hasBooks: booksInShelf });
+      }
     }
   }
 };
