@@ -9,7 +9,7 @@ exports.find = function (bookId) {
       function (err, res) {
         if (err) reject(err);
         else {
-          resolve(res);
+          resolve(res[0]);
         }
       }
     );
