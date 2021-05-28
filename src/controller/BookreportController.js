@@ -5,7 +5,6 @@ const statusCode = require('../modules/statusCode');
 
 exports.create = async (req, res) => {
   const report = JSON.parse(JSON.stringify(req.body));
-
   const reportStatus = await bookreportModel.create(report);
   if (reportStatus != undefined) {
     res.status(statusCode.OK).json({ code: 70, msg: '독후감 정상 등록' });
@@ -25,7 +24,6 @@ exports.findAll = async (req, res) => {
         .json({ code: 71, msg: '작성된 독후감이 없습니다.' });
     } else {
       result = new Array();
-      console.log(reportData);
       for (let i = 0; i < reportData.length; i++) {
         book_info = await bookModel.find(reportData[i].book_id);
         book_info = JSON.parse(JSON.stringify(book_info));
@@ -55,7 +53,7 @@ exports.findAll = async (req, res) => {
     if (noReportData == 0) {
       res
         .status(statusCode.NOT_FOUND)
-        .json({ code: 73, msg: '모든 독후감이 작성된 상태입니다.' });
+        .json({ code: 73, msg: '작성 가능한 독후감이 없습니다.' });
     } else {
       result = new Array();
       for (let i = 0; i < noReportData.length; i++) {
