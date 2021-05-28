@@ -37,25 +37,6 @@ exports.create = function (report) {
   });
 };
 
-/* exports.findItem = function (bookshelf_id) {
-  return new Promise((resolve, reject) => {
-    db.query(
-      `SELECT item_id, book_id FROM Bookshelf_item WHERE bookshelf_id = ? AND bookreport_id IS NOT NULL`,
-      [bookshelf_id],
-      function (err, res) {
-        if (err) reject(err);
-        else {
-          if (res[0] == undefined) {
-            resolve(0); // 작성한 독후감 없음
-          }
-          const items = JSON.parse(JSON.stringify(res));
-          resolve(items);
-        }
-      }
-    );
-  });
-}; */
-
 exports.findItem = function (bookshelf_id) {
   return new Promise((resolve, reject) => {
     db.query(

@@ -81,3 +81,15 @@ exports.findAll = async (req, res) => {
     }
   }
 };
+
+exports.findOne = async (req, res) => {
+  const itemId = req.params.itemId;
+  const reportData = await bookreportModel.getReport(itemId);
+  if (reportData != undefined) {
+    res.status(statusCode.OK).json({
+      code: 75,
+      msg: '선택한 독후감 내용 불러오기 성공',
+      report: reportData,
+    });
+  }
+};
