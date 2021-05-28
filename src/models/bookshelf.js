@@ -14,6 +14,64 @@ exports.find = function (memId) {
   });
 };
 
+exports.findItem = function (bookshelf_id, book_id) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM Bookshelf_item WHERE bookshelf_id = ? AND book_id = ?`,
+      [bookshelf_id, book_id],
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          resolve(res[0]);
+        }
+      }
+    );
+  });
+};
+
+/* exports.getBooks = function (bookshelf_id, bookreport_id) {
+  const sql_all = `SELECT book_id from Bookshelf_item WHERE bookshelf_id = ?`;
+  const sql_noReport = `SELECT book_id from Bookshelf_item WHERE bookshelf_id = ? AND bookreport_id IS NULL`;
+  var query;
+
+  if (bookreport_id == undefined) query = sql_all;
+  else query = sql_noReport;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [bookshelf_id], function (err, res) {
+      if (err) reject(err);
+      else if (res[0] == undefined) {
+        //책장에 책이 없는 경우
+        resolve(res);
+      } else {
+        var booklist = new Array();
+        const books_id = JSON.parse(JSON.stringify(res));
+        books_id.forEach(function (element) {
+          booklist.push(element['book_id']);
+        });
+
+        var JsonArray = new Array();
+        for (let i = 0; i < booklist.length; i++) {
+          var book_id = booklist[i];
+          db.query(
+            `SELECT * FROM Book WHERE book_id = ?`,
+            [book_id],
+            function (err, res) {
+              if (err) reject(err);
+              else {
+                var book_info = JSON.stringify(res[0]);
+                JsonArray.push(JSON.parse(book_info));
+                if (i == booklist.length - 1) {
+                  resolve(JsonArray);
+                }
+              }
+            }
+          );
+        }
+      }
+    });
+  });
+}; */
 exports.getBooks = function (bookshelf_id) {
   return new Promise((resolve, reject) => {
     db.query(

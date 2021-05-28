@@ -25,12 +25,15 @@ const userRouter = require('./routes/users');
 const bookshelfRouter = require('./routes/bookshelf');
 const bookRouter = require('./routes/book');
 const memoRouter = require('./routes/memo');
+const bookreportsRouter = require('./routes/bookreport');
 
 app.use('/', indexRouter); // 경로 /로 시작하면 indexRouter라는 미들웨어 적용
 app.use('/api/users', userRouter);
 app.use('/api/bookshelves', bookshelfRouter);
 app.use('/api/books', bookRouter);
 app.use('/api/memo', memoRouter);
+app.use('/api/bookreports', bookreportsRouter);
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs)); //swagger API 페이지
 
 // catch 404 and forward to error handler

@@ -64,7 +64,7 @@ exports.getInfo = async (req, res) => {
   else {
     res.status(statusCode.OK).json({
       flag: 1,
-      profileImg: memInfo.photoURL,
+      photoURL: memInfo.photoURL,
       nickname: memInfo.nickname,
       area: memInfo.area,
       email: memInfo.email,

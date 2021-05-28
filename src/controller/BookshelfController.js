@@ -8,6 +8,7 @@ exports.getShelf = async (req, res) => {
     res.status(statusCode.OK).json({ code: 0, msg: '책장이 존재하지 않음' });
   } else {
     const bookshelf_id = bookshelfStatus.bookshelf_id;
+
     const booksInShelf = await bookshelfModel.getBooks(bookshelf_id);
     if (booksInShelf == undefined) {
       res
