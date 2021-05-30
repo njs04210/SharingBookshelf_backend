@@ -60,15 +60,15 @@ exports.setInfo = async (req, res) => {
 exports.getInfo = async (req, res) => {
   const memId = req.params.memId;
   const memInfo = await userModel.find(memId);
-  if (memInfo == undefined) res.status(statusCode.NOT_FOUND).json({ flag: 0 });
-  else {
+  const kidsInfo = await userModel.getKids(memId);
+  if (memInfo == undefined) {
+    res.status(statusCode.NOT_FOUND).json({ code: 0 });
+  } else {
     res.status(statusCode.OK).json({
-      flag: 1,
-      photoURL: memInfo.photoURL,
-      nickname: memInfo.nickname,
-      area: memInfo.area,
-      email: memInfo.email,
-      name: memInfo.name,
+      code: 21,
+      msg: '회원 정보 불러오기 성공',
+      user: memInfo,
+      kids: { sex: kidsInfo.sex, age: kidsInfo.age },
     });
   }
 };
