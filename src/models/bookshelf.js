@@ -71,11 +71,24 @@ exports.getBooks = function (bookshelf_id) {
               function (err, res) {
                 if (err) reject(err);
                 else {
-                  var book_info = JSON.stringify(res[0]);
-                  JsonArray.push(JSON.parse(book_info));
-                  if (i == booklist.length - 1) {
-                    resolve(JsonArray);
-                  }
+                  var book_info = JSON.parse(JSON.stringify(res[0]));
+                  db.query(
+                    `SELECT count(book_id) AS total FROM Bookshelf_item WHERE book_id = ?`,
+                    [book_info.book_id],
+                    function (err, res) {
+                      if (err) reject(err);
+                      else {
+                        var total = parseInt(
+                          JSON.parse(JSON.stringify(res[0].total))
+                        );
+                        book_info.total_inShelf = total;
+                        JsonArray.push(book_info);
+                        if (i == booklist.length - 1) {
+                          resolve(JsonArray);
+                        }
+                      }
+                    }
+                  );
                 }
               }
             );

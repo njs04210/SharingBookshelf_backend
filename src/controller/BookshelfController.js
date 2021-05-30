@@ -8,18 +8,23 @@ exports.getAllShelf = async (req, res) => {
   const allBookshelf = await bookshelfModel.findAll(memId);
   for (let i = 0; i < allBookshelf.length; i++) {
     var onePersonData = {};
-    var memberData = {};
     const booksInShelf = await bookshelfModel.getBooks(
       allBookshelf[i].bookshelf_id
     );
     if (booksInShelf.length != 0) {
       const member = await userModel.find(allBookshelf[i].mem_id);
+      const kids = await userModel.getKids(allBookshelf[i].mem_id);
       var memberJson = JSON.parse(JSON.stringify(member));
-      memberData.mem_id = memberJson.mem_id;
-      memberData.photoURL = memberJson.photoURL;
-      memberData.nickname = memberJson.nickname;
 
-      onePersonData.member = memberData;
+      onePersonData.user = {
+        mem_id: memberJson.mem_id,
+        photoURL: memberJson.photoURL,
+        nickname: memberJson.nickname,
+      };
+      onePersonData.kids = {
+        age: kids.age,
+        sex: kids.sex,
+      };
       onePersonData.hasBookList = booksInShelf;
       result.push(onePersonData);
     }
