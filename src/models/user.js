@@ -110,3 +110,15 @@ exports.find = function (memId) {
     );
   });
 };
+
+exports.getKids = function (memId) {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * from Kids WHERE mem_id=?`, [memId], function (err, res) {
+      if (err) reject(err);
+      else {
+        var result = JSON.parse(JSON.stringify(res[0]));
+        resolve(result);
+      }
+    });
+  });
+};
