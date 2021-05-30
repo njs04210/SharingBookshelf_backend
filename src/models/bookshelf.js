@@ -229,3 +229,41 @@ exports.addBook = function (memId, book) {
     );
   });
 };
+
+/* exports.getReportsCounting = function () {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT bookshelf_id, count(bookreport_id) AS total FROM Bookshelf_item WHERE bookreport_id IS NOT NULL GROUP BY bookshelf_id ORDER BY total DESC limit 3`,
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          var result = new Array();
+          for (let i = 0; i < res.length; i++) {
+            var dataSet = JSON.parse(JSON.stringify(res[i]));
+            result.push(dataSet);
+          }
+          resolve(result);
+        }
+      }
+    );
+  });
+}; */
+
+exports.getReportsCounting = function () {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT shelf.mem_id ,count(item.bookreport_id) AS total FROM Bookshelf_item AS item JOIN Bookshelf AS shelf ON item.bookshelf_id = shelf.bookshelf_id WHERE item.bookreport_id IS NOT NULL GROUP BY mem_id ORDER BY total DESC limit 3;`,
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          var result = new Array();
+          for (let i = 0; i < res.length; i++) {
+            var dataSet = JSON.parse(JSON.stringify(res[i]));
+            result.push(dataSet);
+          }
+          resolve(result);
+        }
+      }
+    );
+  });
+};
