@@ -1,6 +1,22 @@
 const db = require('../config/db');
 const Promise = require('es6-promise').Promise;
 
+exports.findAll = function (memId) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM Bookshelf WHERE mem_id != ?`,
+      [memId],
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          const bookshelf = JSON.parse(JSON.stringify(res));
+          resolve(bookshelf);
+        }
+      }
+    );
+  });
+};
+
 exports.find = function (memId) {
   return new Promise((resolve, reject) => {
     db.query(
