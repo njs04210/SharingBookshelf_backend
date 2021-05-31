@@ -9,6 +9,9 @@ router.post('/', authUtil, BookreportController.create);
 // get Book Report list
 router.get('/', authUtil, BookreportController.findAll);
 
+/* // get Other's Book Report list
+router.get('/:memId', authUtil, BookreportController.findAll); */
+
 // get One Report created
 router.get('/:itemId', authUtil, BookreportController.findOne);
 
