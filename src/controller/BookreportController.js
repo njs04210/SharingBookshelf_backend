@@ -12,7 +12,10 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = async (req, res) => {
-  const memId = req.memId;
+  var memId = req.memId;
+  if (req.params.memId != undefined) {
+    memId = req.params.memId;
+  }
   const qs = req.query.available;
   var bookshelf = await bookshelfModel.find(memId);
   var result, book_info, report_info, data;
