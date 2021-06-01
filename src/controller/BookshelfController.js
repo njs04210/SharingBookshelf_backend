@@ -2,8 +2,9 @@ const bookshelfModel = require('../models/bookshelf');
 const userModel = require('../models/user');
 const statusCode = require('../modules/statusCode');
 
-exports.getAllShelf = async (req, res) => {
+exports.getAllShelfFiltered = async (req, res) => {
   const memId = req.memId;
+
   var result = [];
   const allBookshelf = await bookshelfModel.findAll(memId);
   for (let i = 0; i < allBookshelf.length; i++) {
@@ -32,6 +33,60 @@ exports.getAllShelf = async (req, res) => {
       res
         .status(statusCode.OK)
         .json({ code: 60, msg: '회원의 모든 책장 가져오기', result: result });
+    }
+  }
+};
+
+exports.getAllShelf = async (req, res) => {
+  const memId = req.memId;
+  var query_age, query_category;
+  if (Object.keys(req.query).length != 0) {
+    query_age = JSON.parse(req.query.age);
+    query_category = JSON.parse(req.query.category);
+  }
+  var result = [];
+  const allBookshelf = await bookshelfModel.findAll(memId, query_age);
+  if (allBookshelf.length == 0) {
+    res
+      .status(statusCode.NOT_FOUND)
+      .json({ code: 61, msg: '검색 결과가 없습니다.' });
+  } else {
+    for (let i = 0; i < allBookshelf.length; i++) {
+      var onePersonData = {};
+      const booksInShelf = await bookshelfModel.getBooks(
+        allBookshelf[i].bookshelf_id,
+        query_category
+      );
+      if (booksInShelf.length != 0) {
+        const member = await userModel.find(allBookshelf[i].mem_id);
+        const kids = await userModel.getKids(allBookshelf[i].mem_id);
+        var memberJson = JSON.parse(JSON.stringify(member));
+
+        onePersonData.user = {
+          mem_id: memberJson.mem_id,
+          photoURL: memberJson.photoURL,
+          nickname: memberJson.nickname,
+        };
+        onePersonData.kids = {
+          age: kids.age,
+          sex: kids.sex,
+        };
+        onePersonData.hasBookList = booksInShelf;
+        result.push(onePersonData);
+      }
+      if (i == allBookshelf.length - 1) {
+        if (result.length != 0) {
+          res.status(statusCode.OK).json({
+            code: 60,
+            msg: '회원의 모든 책장 가져오기',
+            result: result,
+          });
+        } else {
+          res
+            .status(statusCode.NOT_FOUND)
+            .json({ code: 61, msg: '검색 결과가 없습니다.' });
+        }
+      }
     }
   }
 };

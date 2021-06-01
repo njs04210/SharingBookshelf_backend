@@ -59,16 +59,19 @@ exports.setInfo = async (req, res) => {
 
 exports.getInfo = async (req, res) => {
   const memId = req.params.memId;
-  const memInfo = await userModel.find(memId);
+  var memInfo = await userModel.find(memId);
   const kidsInfo = await userModel.getKids(memId);
   if (memInfo == undefined) {
     res.status(statusCode.NOT_FOUND).json({ code: 0 });
   } else {
-    res.status(statusCode.OK).json({
-      code: 21,
-      msg: '회원 정보 불러오기 성공',
-      user: memInfo,
-      kids: { sex: kidsInfo.sex, age: kidsInfo.age },
-    });
+    var flag = delete memInfo['password'];
+    if (flag) {
+      res.status(statusCode.OK).json({
+        code: 21,
+        msg: '회원 정보 불러오기 성공',
+        user: memInfo,
+        kids: { sex: kidsInfo.sex, age: kidsInfo.age },
+      });
+    }
   }
 };
