@@ -9,5 +9,7 @@ router.post('/', UserController.login);
 router.patch('/', authUtil, UserController.setInfo);
 //회원 정보 가져오기
 router.get('/:memId', authUtil, UserController.getInfo);
+// 회원 도서 분석
+router.get('/:memId/analysis', authUtil, UserController.getAnalysis);
 
 module.exports = router;

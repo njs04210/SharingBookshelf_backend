@@ -250,7 +250,7 @@ exports.addBook = function (memId, book) {
                       else {
                         if (res[0] == undefined) {
                           db.query(
-                            `INSERT INTO Bookshelf_item (bookshelf_id, book_id, category) VALUES (?,?, ?)`,
+                            `INSERT INTO Bookshelf_item (bookshelf_id, book_id, category, created) VALUES (?,?,?,NOW())`,
                             [bookshelf_id, book_id, book.category],
                             function (err) {
                               if (err) reject(err);
@@ -300,14 +300,121 @@ exports.getReportsCounting = function () {
     );
   });
 };
-/* 
-exports.getShelfStatus = function (bookshelf_id) {
+
+// 특정 책장의 모든 책 개수
+exports.getTotalBooks = function (bookshelf_id) {
   return new Promise((resolve, reject) => {
     db.query(
-      `SELECT * FROM Bookshelf_item WHERE bookshelf_id = ? ORDER BY category`,
+      `SELECT count(item_id) AS total_book FROM iBookShare.Bookshelf_item WHERE bookshelf_id = ?`,
       [bookshelf_id],
-      function 
+      function (err, res) {
+        if (err) {
+          reject(err);
+        } else {
+          var result = JSON.parse(JSON.stringify(res[0]));
+          resolve(result.total_book);
+        }
+      }
     );
   });
 };
- */
+
+exports.countBooksCategory = function (bookshelf_id) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT category AS category_id, count(category) AS total FROM Bookshelf_item WHERE Bookshelf_id = ? GROUP BY category`,
+      [bookshelf_id],
+      function (err, res) {
+        if (err) {
+          reject(err);
+        } else {
+          if (res.length != 0) {
+            var data;
+            var result = new Array();
+            for (let i = 0; i < res.length; i++) {
+              data = JSON.parse(JSON.stringify(res[i]));
+              result.push(data);
+              if (i == res.length - 1) {
+                resolve(result);
+              }
+            }
+          } else {
+            resolve(0);
+          }
+        }
+      }
+    );
+  });
+};
+
+exports.countBooksDate = function (bookshlef_id) {
+  var result = {};
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT count(item_id) AS total FROM Bookshelf_item WHERE bookshelf_id = ? AND created BETWEEN DATE_ADD(NOW(),INTERVAL -1 DAY ) AND NOW()`,
+      [bookshlef_id],
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          var oneData = JSON.parse(JSON.stringify(res[0]));
+          var today_total = oneData.total;
+          result.today_read = today_total;
+          db.query(
+            `SELECT count(item_id) AS total FROM Bookshelf_item WHERE bookshelf_id = ? AND created BETWEEN DATE_ADD(NOW(),INTERVAL -1 WEEK ) AND NOW()`,
+            [bookshlef_id],
+            function (err, res) {
+              if (err) reject(err);
+              else {
+                oneData = JSON.parse(JSON.stringify(res[0]));
+                var week1_total = oneData.total;
+                result.week1_read = week1_total;
+                db.query(
+                  `SELECT count(item_id) AS total FROM Bookshelf_item WHERE bookshelf_id = ? AND created BETWEEN DATE_ADD(NOW(),INTERVAL -2 WEEK ) AND NOW()`,
+                  [bookshlef_id],
+                  function (err, res) {
+                    if (err) reject(err);
+                    else {
+                      oneData = JSON.parse(JSON.stringify(res[0]));
+                      var week2_total = oneData.total - week1_total;
+                      result.week2_read = week2_total;
+                      result.minus = week1_total - week2_total;
+                      resolve(result);
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+};
+
+exports.getBookshelfId_sameKids = function (memId, age) {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM Kids AS kids JOIN Bookshelf AS shelf ON kids.mem_id = shelf.mem_id WHERE kids.mem_id != ? AND kids.age = ?`,
+      [memId, age],
+      function (err, res) {
+        if (err) reject(err);
+        else {
+          if (res.length != 0) {
+            var data, bookshelf_id;
+            var result = new Array();
+            for (let i = 0; i < res.length; i++) {
+              data = JSON.parse(JSON.stringify(res[i]));
+              bookshelf_id = data.bookshelf_id;
+              result.push(bookshelf_id);
+              if (i == res.length - 1) {
+                resolve(result);
+              }
+            }
+          } else {
+            resolve(0);
+          }
+        }
+      }
+    );
+  });
+};
