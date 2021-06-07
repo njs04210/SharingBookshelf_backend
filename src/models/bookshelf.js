@@ -305,7 +305,7 @@ exports.getReportsCounting = function () {
 exports.getTotalBooks = function (bookshelf_id) {
   return new Promise((resolve, reject) => {
     db.query(
-      `SELECT count(item_id) AS total_book FROM iBookShare.Bookshelf_item WHERE bookshelf_id = ?`,
+      `SELECT count(item_id) AS total_book FROM Bookshelf_item WHERE bookshelf_id = ?`,
       [bookshelf_id],
       function (err, res) {
         if (err) {
